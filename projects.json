@@ -1,0 +1,26 @@
+[
+  {
+    "title": "CurlingMania",
+    "type": "game",
+    "released": "2026-03-31",
+    "description": "Real-time multiplayer curling. Grab, drag, and release your stones to score.",
+    "tags": ["Multiplayer", "Mouse"],
+    "url": "/CurlingMania/"
+  },
+  {
+    "title": "Battle Thunder",
+    "type": "game",
+    "released": "2026-01-14",
+    "description": "3D multiplayer dogfights. Host a squadron, share the room code, and fill the sky with AI planes.",
+    "tags": ["Multiplayer", "3D", "Keyboard"],
+    "url": "/BattleThunder/"
+  },
+  {
+    "title": "E-Money's Bar",
+    "type": "game",
+    "released": "2025-05-26",
+    "description": "A bluffing card game for 2 to 8 players. Lie about your cards, and if someone calls you out, spin the cylinder.",
+    "tags": ["Multiplayer", "Cards"],
+    "url": "/EMoneysBar/"
+  }
+]
