@@ -45,7 +45,7 @@
     "title": "Cogtest",
     "type": "game",
     "released": "2025-12-01",
-    "description": "Five quick tests of how your brain works: time a second in your head, react as fast as you can, match patterns, hold back on cue, and remember sequences.",
+    "description": "Five quick tests of reaction, timing, and memory.",
     "tags": ["Game", "Singleplayer", "PC"],
     "url": "/Cogtest/",
     "source": "https://github.com/Breadmaster101/Cogtest"
