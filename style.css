@@ -45,16 +45,30 @@ a { color: inherit; text-decoration: none; }
 .side { position: sticky; top: 32px; }
 .side h1 { font-size: 36px; font-weight: 500; letter-spacing: -.035em; line-height: 1.08; margin-bottom: 28px; text-wrap: balance; }
 
-.filters { display: flex; flex-direction: column; margin-bottom: 18px; }
+.filters { display: flex; flex-direction: column; gap: 16px; margin-bottom: 18px; }
+.group { border: none; min-width: 0; }
+.group legend { padding-bottom: 4px; color: var(--mute); text-transform: uppercase; font-size: 11px; }
 .filter {
-  display: flex; align-items: center; width: 100%;
+  display: flex; align-items: center; gap: 10px; width: 100%;
   font: 12px var(--mono); letter-spacing: .02em; color: var(--mute);
-  background: none; border: none; border-bottom: 1px solid var(--line);
-  padding: 7px 0; cursor: pointer; text-align: left;
+  border-bottom: 1px solid var(--line);
+  padding: 7px 0; cursor: pointer;
 }
-.filter:hover { color: var(--fg); }
-.filter span:first-child { flex: 1; }
-.filter[aria-checked="true"] { color: var(--fg); }
+.filter:hover, .filter:has(:checked) { color: var(--fg); }
+.filter span:nth-of-type(1) { flex: 1; }
+.filter.none { opacity: .45; }
+.filter input {
+  appearance: none; flex: none; width: 12px; height: 12px; margin: 0;
+  border: 1px solid var(--line3); background: none; cursor: pointer;
+  display: grid; place-content: center;
+}
+.filter input::after { content: ""; width: 6px; height: 6px; background: var(--fg); transform: scale(0); }
+.filter input:checked { border-color: var(--fg); }
+.filter input:checked::after { transform: scale(1); }
+.filter:hover input { border-color: var(--fg); }
+
+.clear { align-self: flex-start; background: none; border: none; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.clear:hover { color: var(--fg); }
 
 #search {
   width: 100%; background: none; color: var(--fg);
