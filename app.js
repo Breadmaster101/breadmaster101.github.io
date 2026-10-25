@@ -7,7 +7,8 @@
 const TAG_GROUPS = [
   ['Type', ['Game', 'App', 'Tool']],
   ['Players', ['Singleplayer', 'Multiplayer'], 'Game'],
-  ['Platform', ['PC', 'Mobile']],
+  ['Graphics', ['2D', '3D'], 'Game'],
+  ['Platform', ['PC web', 'Mobile web']],
 ];
 
 const state = { projects: [], groups: [], selected: new Set(), query: '' };

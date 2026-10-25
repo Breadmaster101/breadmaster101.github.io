@@ -4,7 +4,7 @@
     "type": "game",
     "released": "2026-03-31",
     "description": "A 2D multiplayer curling-inspired web game. The main mechanic is physics based.",
-    "tags": ["Game", "Multiplayer", "Mobile", "PC"],
+    "tags": ["Game", "2D", "Multiplayer", "Mobile web", "PC web"],
     "url": "/CurlingMania/"
   },
   {
@@ -12,7 +12,7 @@
     "type": "game",
     "released": "2026-01-14",
     "description": "A 3D multiplayer plane dogfighting web game. You can also play single player against AI planes, or add them to multiplayer games.",
-    "tags": ["Game", "Multiplayer", "Singleplayer", "PC"],
+    "tags": ["Game", "3D", "Multiplayer", "Singleplayer", "PC web"],
     "url": "/BattleThunder/"
   },
   {
@@ -20,7 +20,7 @@
     "type": "game",
     "released": "2025-05-26",
     "description": "A 2D multiplayer bluffing card game based on the card game \"BS\".",
-    "tags": ["Game", "Multiplayer", "Mobile", "PC"],
+    "tags": ["Game", "2D", "Multiplayer", "Mobile web", "PC web"],
     "url": "/EMoneysBar/"
   },
   {
@@ -28,7 +28,7 @@
     "type": "app",
     "released": "2026-10-11",
     "description": "An encrypted peer-to-peer file sharing website that transfers files directly between devices using WebRTC, without passing through a server.",
-    "tags": ["App", "Tool", "Mobile", "PC", "Open source"],
+    "tags": ["App", "Tool", "Mobile web", "PC web", "Open source"],
     "url": "/WebSend/",
     "source": "https://github.com/Breadmaster101/WebSend"
   },
@@ -37,7 +37,7 @@
     "type": "game",
     "released": "2025-01-01",
     "description": "A simple 2D moon lander simulator I built using DeepSeek R1 to test out its capabilities.",
-    "tags": ["Game", "Singleplayer", "PC", "Open source"],
+    "tags": ["Game", "2D", "Singleplayer", "PC web", "Open source"],
     "url": "/Moon-Lander-Game/",
     "source": "https://github.com/Breadmaster101/Moon-Lander-Game"
   },
@@ -46,7 +46,7 @@
     "type": "game",
     "released": "2025-12-01",
     "description": "5 brain \"benchmarking\" mini-games that test your reaction speed, pattern recognition, focus, and memory.",
-    "tags": ["Game", "Singleplayer", "PC", "Open source"],
+    "tags": ["Game", "2D", "Singleplayer", "PC web", "Open source"],
     "url": "/Cogtest/",
     "source": "https://github.com/Breadmaster101/Cogtest"
   },
@@ -55,7 +55,7 @@
     "type": "app",
     "released": "2025-06-01",
     "description": "A Minecraft server administration tool that generates a whitelist.json file based off a list of usernames.",
-    "tags": ["Tool", "Mobile", "PC", "Open source"],
+    "tags": ["Tool", "Mobile web", "PC web", "Open source"],
     "url": "/Minecraft-Whitelist-Generator/",
     "source": "https://github.com/Breadmaster101/Minecraft-Whitelist-Generator"
   }
