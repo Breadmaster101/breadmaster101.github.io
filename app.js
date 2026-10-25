@@ -2,10 +2,11 @@
 
 // Checkbox groups built from project tags. Within a group any checked tag
 // matches; across groups every group with a checked tag must match.
-// Tags not listed here fall into "Other".
+// Tags not listed here fall into "Other". A group with a parent tag is shown
+// nested under that tag's box and only narrows projects that have the parent.
 const TAG_GROUPS = [
   ['Type', ['Game', 'App', 'Tool']],
-  ['Players', ['Singleplayer', 'Multiplayer']],
+  ['Players', ['Singleplayer', 'Multiplayer'], 'Game'],
   ['Platform', ['PC', 'Mobile']],
 ];
 
@@ -37,23 +38,29 @@ function buildGroups() {
   const other = [...used].filter((t) => !known.has(t)).sort();
   // Only keep tags that at least one project has.
   return [...TAG_GROUPS, ['Other', other]]
-    .map(([name, tags]) => [name, tags.filter((t) => used.has(t))])
-    .filter(([, tags]) => tags.length);
+    .map(([name, tags, parent]) => [name, tags.filter((t) => used.has(t)), parent])
+    .filter(([, tags, parent]) => tags.length && (!parent || used.has(parent)));
+}
+
+function checkbox(tag, sub) {
+  return el('label', { class: sub ? 'filter sub' : 'filter' },
+    el('input', { type: 'checkbox', value: tag }),
+    el('span', {}, tag),
+    el('span', { class: 'count' })
+  );
 }
 
 function renderFilters() {
   state.groups = buildGroups();
   $filters.replaceChildren(
-    ...state.groups.map(([name, tags]) =>
+    ...state.groups.filter(([, , parent]) => !parent).map(([name, tags]) =>
       el('fieldset', { class: 'group' },
         el('legend', { class: 'mono' }, name),
-        ...tags.map((tag) =>
-          el('label', { class: 'filter' },
-            el('input', { type: 'checkbox', value: tag }),
-            el('span', {}, tag),
-            el('span', { class: 'count' })
-          )
-        )
+        ...tags.flatMap((tag) => [
+          checkbox(tag),
+          ...state.groups.filter(([, , parent]) => parent === tag)
+            .flatMap(([, subTags]) => subTags.map((t) => checkbox(t, true))),
+        ])
       )
     ),
     el('button', { class: 'clear mono', type: 'button', hidden: '' }, 'Clear filters')
@@ -77,8 +84,8 @@ function updateFilters() {
 
 function matches(p, skipGroup = -1) {
   const tags = p.tags || [];
-  for (const [i, [, groupTags]] of state.groups.entries()) {
-    if (i === skipGroup) continue;
+  for (const [i, [, groupTags, parent]] of state.groups.entries()) {
+    if (i === skipGroup || (parent && !tags.includes(parent))) continue;
     const checked = groupTags.filter((t) => state.selected.has(t));
     if (checked.length && !checked.some((t) => tags.includes(t))) return false;
   }
@@ -120,8 +127,18 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 $filters.addEventListener('change', (e) => {
   const tag = e.target.value;
-  if (e.target.checked) state.selected.add(tag);
-  else state.selected.delete(tag);
+  const parent = state.groups.find(([, tags]) => tags.includes(tag))[2];
+  if (e.target.checked) {
+    state.selected.add(tag);
+    // Ticking a nested box ticks its parent too.
+    if (parent) state.selected.add(parent);
+  } else {
+    state.selected.delete(tag);
+    // Unticking a parent clears the boxes nested under it.
+    for (const [, tags, p] of state.groups) {
+      if (p === tag) tags.forEach((t) => state.selected.delete(t));
+    }
+  }
   updateFilters();
   renderProjects();
 });
