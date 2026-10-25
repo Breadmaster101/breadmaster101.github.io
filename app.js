@@ -1,6 +1,6 @@
 // Renders projects.json into the filter list and card stack.
 
-const TYPE_LABELS = { game: 'Games', app: 'Apps' };
+const TYPE_LABELS = { game: 'Games', app: 'Apps and Tools' };
 
 const state = { projects: [], filter: 'all', query: '' };
 
@@ -50,7 +50,7 @@ function matches(p) {
 }
 
 function card(p) {
-  const typeLabel = p.type === 'app' ? 'App' : 'Game';
+  const typeLabel = p.type === 'app' ? 'App and Tool' : 'Game';
   const metaLeft = el('span', {},
     [p.featured ? 'Latest' : null, typeLabel, ...(p.tags || [])].filter(Boolean).join(' · ')
   );

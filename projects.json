@@ -4,7 +4,7 @@
     "type": "game",
     "released": "2026-03-31",
     "description": "A 2D multiplayer curling-inspired web game. The main mechanic is physics based.",
-    "tags": ["Multiplayer", "Mouse"],
+    "tags": ["Game", "Multiplayer", "Mobile", "PC"],
     "url": "/CurlingMania/"
   },
   {
@@ -12,15 +12,15 @@
     "type": "game",
     "released": "2026-01-14",
     "description": "A 3D multiplayer plane dogfighting web game. You can also play single player against AI planes, or add them to multiplayer games.",
-    "tags": ["Multiplayer", "3D", "Keyboard"],
+    "tags": ["Game", "Multiplayer", "Singleplayer", "PC only"],
     "url": "/BattleThunder/"
   },
   {
     "title": "E-Money's Bar",
     "type": "game",
     "released": "2025-05-26",
-    "description": "A 2D multiplayer bluffing card game based on the card game "BS".",
-    "tags": ["Multiplayer", "Cards"],
+    "description": "A 2D multiplayer bluffing card game based on the card game \"BS\".",
+    "tags": ["Game", "Multiplayer", "Mobile", "PC"],
     "url": "/EMoneysBar/"
   },
   {
@@ -28,7 +28,7 @@
     "type": "app",
     "released": "2026-10-11",
     "description": "An encrypted peer-to-peer file sharing website that transfers files directly between devices using WebRTC, without passing through a server.",
-    "tags": ["Files", "P2P", "Mobile"],
+    "tags": ["App", "Tool", "Mobile", "PC"],
     "url": "/WebSend/",
     "source": "https://github.com/Breadmaster101/WebSend"
   }
