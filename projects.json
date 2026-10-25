@@ -12,7 +12,7 @@
     "type": "game",
     "released": "2026-01-14",
     "description": "A 3D multiplayer plane dogfighting web game. You can also play single player against AI planes, or add them to multiplayer games.",
-    "tags": ["Game", "Multiplayer", "Singleplayer", "PC only"],
+    "tags": ["Game", "Multiplayer", "Singleplayer", "PC"],
     "url": "/BattleThunder/"
   },
   {
@@ -37,8 +37,17 @@
     "type": "game",
     "released": "2025-01-01",
     "description": "A simple 2D moon lander simulator I built using DeepSeek R1 to test out its capabilities.",
-    "tags": ["Game", "Singleplayer", "PC only"],
+    "tags": ["Game", "Singleplayer", "PC"],
     "url": "/Moon-Lander-Game/",
     "source": "https://github.com/Breadmaster101/Moon-Lander-Game"
+  },
+  {
+    "title": "Cogtest",
+    "type": "game",
+    "released": "2025-12-01",
+    "description": "Five quick tests of how your brain works: time a second in your head, react as fast as you can, match patterns, hold back on cue, and remember sequences.",
+    "tags": ["Game", "Singleplayer", "PC"],
+    "url": "/Cogtest/",
+    "source": "https://github.com/Breadmaster101/Cogtest"
   }
 ]
