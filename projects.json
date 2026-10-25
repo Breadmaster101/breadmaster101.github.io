@@ -53,7 +53,7 @@
   {
     "title": "Minecraft Whitelist Generator",
     "type": "app",
-    "released": "2025-09-27",
+    "released": "2025-06-01",
     "description": "A Minecraft server administration tool that generates a whitelist.json file based off a list of usernames.",
     "tags": ["Tool", "Mobile", "PC", "Open source"],
     "url": "/Minecraft-Whitelist-Generator/",
