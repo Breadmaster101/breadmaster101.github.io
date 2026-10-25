@@ -49,5 +49,14 @@
     "tags": ["Game", "Singleplayer", "PC", "Open source"],
     "url": "/Cogtest/",
     "source": "https://github.com/Breadmaster101/Cogtest"
+  },
+  {
+    "title": "Minecraft Whitelist Generator",
+    "type": "app",
+    "released": "2025-09-27",
+    "description": "A Minecraft server administration tool that generates a whitelist.json file based off a list of usernames.",
+    "tags": ["Tool", "Mobile", "PC", "Open source"],
+    "url": "/Minecraft-Whitelist-Generator/",
+    "source": "https://github.com/Breadmaster101/Minecraft-Whitelist-Generator"
   }
 ]
