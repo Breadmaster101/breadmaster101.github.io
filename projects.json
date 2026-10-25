@@ -31,5 +31,14 @@
     "tags": ["App", "Tool", "Mobile", "PC"],
     "url": "/WebSend/",
     "source": "https://github.com/Breadmaster101/WebSend"
+  },
+  {
+    "title": "Moon Lander",
+    "type": "game",
+    "released": "2025-01-01",
+    "description": "A simple 2D moon lander simulator I built using DeepSeek R1 to test out its capabilities.",
+    "tags": ["Game", "Singleplayer", "PC only"],
+    "url": "/Moon-Lander-Game/",
+    "source": "https://github.com/Breadmaster101/Moon-Lander-Game"
   }
 ]
