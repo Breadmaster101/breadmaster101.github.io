@@ -4,4 +4,4 @@ Source for [breadmaster101.github.io](https://breadmaster101.github.io), a showc
 
 ## License
 
-© Breadmaster. All rights reserved.
+© Breadmaster101. All rights reserved.
