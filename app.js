@@ -8,7 +8,6 @@ const $filters = document.getElementById('filters');
 const $search = document.getElementById('search');
 const $projects = document.getElementById('projects');
 
-const pad = (n) => String(n).padStart(2, '0');
 
 function formatDate(iso) {
   const d = new Date(iso + 'T00:00:00');
@@ -39,7 +38,7 @@ function renderFilters() {
       role: 'radio',
       'aria-checked': String(state.filter === value),
       'data-value': value,
-    }, el('span', {}, label), el('span', {}, pad(counts[value])))
+    }, el('span', {}, label), el('span', {}, counts[value]))
   ));
 }
 
