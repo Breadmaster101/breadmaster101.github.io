@@ -45,7 +45,7 @@
     "title": "Cogtest",
     "type": "game",
     "released": "2025-12-01",
-    "description": "Five quick tests of reaction, timing, and memory.",
+    "description": "5 brain \"benchmarking\" mini-games that test your reaction speed, pattern recognition, focus, and memory.",
     "tags": ["Game", "Singleplayer", "PC"],
     "url": "/Cogtest/",
     "source": "https://github.com/Breadmaster101/Cogtest"
