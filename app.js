@@ -53,7 +53,6 @@ function matches(p) {
 function card(p) {
   const typeLabel = p.type === 'app' ? 'App' : 'Game';
   const metaLeft = el('span', {},
-    p.featured ? el('span', { class: 'dot' }) : null,
     [p.featured ? 'Latest' : null, typeLabel, ...(p.tags || [])].filter(Boolean).join(' · ')
   );
 
@@ -84,28 +83,6 @@ function renderProjects({ animate = false } = {}) {
     cards.forEach((c, i) => { c.classList.add('reveal'); c.style.setProperty('--i', i + 3); });
   }
   $projects.replaceChildren(...cards);
-}
-
-// Cursor tracking for the background spotlight and card border light.
-if (matchMedia('(hover: hover)').matches) {
-  const root = document.documentElement;
-  let x = 0, y = 0, queued = false;
-
-  const update = () => {
-    queued = false;
-    root.style.setProperty('--mx', x + 'px');
-    root.style.setProperty('--my', y + 'px');
-    for (const c of $projects.querySelectorAll('.card')) {
-      const r = c.getBoundingClientRect();
-      c.style.setProperty('--cx', (x - r.left) + 'px');
-      c.style.setProperty('--cy', (y - r.top) + 'px');
-    }
-  };
-
-  window.addEventListener('pointermove', (e) => {
-    x = e.clientX; y = e.clientY;
-    if (!queued) { queued = true; requestAnimationFrame(update); }
-  }, { passive: true });
 }
 
 document.getElementById('year').textContent = new Date().getFullYear();
