@@ -95,7 +95,8 @@ $search.addEventListener('input', () => {
   renderProjects();
 });
 
-fetch('projects.json')
+// Revalidate every load so a newly added project shows up immediately.
+fetch('projects.json', { cache: 'no-cache' })
   .then((r) => r.json())
   .then((projects) => {
     // Newest first; the newest is featured unless one is marked explicitly.

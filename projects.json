@@ -22,5 +22,14 @@
     "description": "A bluffing card game for 2 to 8 players. Lie about your cards, and if someone calls you out, spin the cylinder.",
     "tags": ["Multiplayer", "Cards"],
     "url": "/EMoneysBar/"
+  },
+  {
+    "title": "WebSend",
+    "type": "app",
+    "released": "2026-10-11",
+    "description": "Send files and text straight between devices over an encrypted peer-to-peer connection. No server, no account, no upload.",
+    "tags": ["Files", "P2P", "Mobile"],
+    "url": "/WebSend/",
+    "source": "https://github.com/Breadmaster101/WebSend"
   }
 ]
