@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0908">
+    <meta name="description" content="E-Money's Bar: a high-stakes bluffing game of cards and Russian roulette.">
+    <title>E-Money's Bar</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://quicklash-server.onrender.com">
+
+    <script>
+        try {
+            fetch('https://quicklash-server.onrender.com/socket.io/?EIO=4&transport=polling',
+                { mode: 'no-cors', cache: 'no-store' });
+        } catch (e) { /* the socket will wake it the slow way */ }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap"
+        rel="stylesheet">
+
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script type="module" crossorigin src="/EMoneysBar/assets/index-Dq4DSa8H.js"></script>
+  <link rel="stylesheet" crossorigin href="/EMoneysBar/assets/index-DcgPeXPW.css">
+</head>
+
+<body>
+    <svg id="svg-defs" aria-hidden="true" focusable="false">
+        <defs>
+            <linearGradient id="grad-card-face" x1="0" y1="0" x2="0.35" y2="1">
+                <stop offset="0%" stop-color="#fffdf6" />
+                <stop offset="55%" stop-color="#f5eede" />
+                <stop offset="100%" stop-color="#e6dbc4" />
+            </linearGradient>
+            <linearGradient id="grad-card-back" x1="0" y1="0" x2="0.4" y2="1">
+                <stop offset="0%" stop-color="#4a1220" />
+                <stop offset="60%" stop-color="#320b16" />
+                <stop offset="100%" stop-color="#1d060d" />
+            </linearGradient>
+            <linearGradient id="grad-card-gloss" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5" />
+                <stop offset="45%" stop-color="#ffffff" stop-opacity="0.06" />
+                <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+            </linearGradient>
+            <pattern id="pat-card-back" width="12" height="12" patternUnits="userSpaceOnUse"
+                patternTransform="rotate(45)">
+                <path d="M6 0 L12 6 L6 12 L0 6 Z" fill="none" stroke="#d99a44" stroke-width="0.7"
+                    stroke-opacity="0.55" />
+                <circle cx="6" cy="6" r="1.1" fill="#d99a44" fill-opacity="0.35" />
+            </pattern>
+            <radialGradient id="grad-cyl-metal">
+                <stop offset="0%" stop-color="#16130f" />
+                <stop offset="100%" stop-color="#16130f" />
+            </radialGradient>
+            <radialGradient id="grad-chamber-live">
+                <stop offset="0%" stop-color="#c9a961" />
+                <stop offset="100%" stop-color="#c9a961" />
+            </radialGradient>
+            <radialGradient id="grad-chamber-spent">
+                <stop offset="0%" stop-color="#0a0908" />
+                <stop offset="100%" stop-color="#0a0908" />
+            </radialGradient>
+            <radialGradient id="grad-muzzle">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+                <stop offset="26%" stop-color="#ffdd8a" stop-opacity=".95" />
+                <stop offset="55%" stop-color="#ff781e" stop-opacity=".5" />
+                <stop offset="100%" stop-color="#ff781e" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="grad-muzzle-core">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="1" />
+                <stop offset="62%" stop-color="#ffffff" stop-opacity=".96" />
+                <stop offset="82%" stop-color="#fff3cf" stop-opacity=".6" />
+                <stop offset="100%" stop-color="#ffe6a1" stop-opacity="0" />
+            </radialGradient>
+            <radialGradient id="grad-muzzle-occlude">
+                <stop offset="0%" stop-color="#fffdf4" stop-opacity=".97" />
+                <stop offset="45%" stop-color="#ffe9b4" stop-opacity=".8" />
+                <stop offset="75%" stop-color="#ff9a2e" stop-opacity=".28" />
+                <stop offset="100%" stop-color="#ff781e" stop-opacity="0" />
+            </radialGradient>
+            <linearGradient id="grad-muzzle-cone" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity=".95" />
+                <stop offset="35%" stop-color="#ffd884" stop-opacity=".7" />
+                <stop offset="100%" stop-color="#ff781e" stop-opacity="0" />
+            </linearGradient>
+            <filter id="fx-chroma" x="-20%" y="-20%" width="140%" height="140%"
+                color-interpolation-filters="sRGB">
+                <feOffset in="SourceGraphic" dx="-2.2" dy="0" result="rShift" />
+                <feColorMatrix in="rShift" result="rOnly" type="matrix" values="1 0 0 0 0
+                           0 0 0 0 0
+                           0 0 0 0 0
+                           0 0 0 1 0" />
+                <feOffset in="SourceGraphic" dx="2.2" dy="0" result="cShift" />
+                <feColorMatrix in="cShift" result="cOnly" type="matrix" values="0 0 0 0 0
+                           0 1 0 0 0
+                           0 0 1 0 0
+                           0 0 0 1 0" />
+                <feBlend in="rOnly" in2="cOnly" mode="screen" result="split" />
+                <feBlend in="SourceGraphic" in2="split" mode="screen" />
+            </filter>
+        </defs>
+
+        <symbol id="i-deal" viewBox="0 0 24 24">
+            <g transform="rotate(-15 12 13)">
+                <rect x="3.5" y="5.5" width="10" height="14" />
+            </g>
+            <g transform="rotate(11 12 13)">
+                <rect x="10.5" y="5.5" width="10" height="14" />
+            </g>
+        </symbol>
+        <symbol id="i-enter" viewBox="0 0 24 24">
+            <path d="M14 3.5H5v17h9" />
+            <path d="M9.5 12h10.5M16.5 8 20.5 12 16.5 16" />
+        </symbol>
+        <symbol id="i-exit" viewBox="0 0 24 24">
+            <path d="M10 3.5H4v17h6" />
+            <path d="M13 12h7.5M17 8 21 12 17 16" />
+        </symbol>
+        <symbol id="i-sound-on" viewBox="0 0 24 24">
+            <path d="M3.5 9h3.5L11.5 5v14L7 15H3.5z" />
+            <path d="M15 9.2a4 4 0 0 1 0 5.6" />
+            <path d="M17.8 6.6a8 8 0 0 1 0 10.8" />
+        </symbol>
+        <symbol id="i-sound-off" viewBox="0 0 24 24">
+            <path d="M3.5 9h3.5L11.5 5v14L7 15H3.5z" />
+            <path d="M15.5 9.5 21 15M21 9.5 15.5 15" />
+        </symbol>
+        <symbol id="i-log" viewBox="0 0 24 24">
+            <path d="M4 6.5h16M4 12h16M4 17.5h10" />
+        </symbol>
+        <symbol id="i-close" viewBox="0 0 24 24">
+            <path d="M5.5 5.5 18.5 18.5M18.5 5.5 5.5 18.5" />
+        </symbol>
+        <symbol id="i-star" viewBox="0 0 24 24">
+            <path d="M12 2.6 14.6 9h6.8l-5.5 4.4 2.1 6.6L12 16l-6 4 2.1-6.6L2.6 9h6.8z" />
+        </symbol>
+        <symbol id="i-check" viewBox="0 0 24 24">
+            <path d="M4.5 12.5 9.5 17.5 19.5 6.5" />
+        </symbol>
+        <symbol id="i-ornament" viewBox="0 0 140 32">
+            <path d="M2 16h44M94 16h44" />
+            <path d="M70 3 79 16 70 29 61 16z" />
+            <path d="M70 8.5 74.5 16 70 23.5 65.5 16z" />
+            <path d="M52 16 58 10.5V21.5zM88 16 82 10.5V21.5z" />
+        </symbol>
+
+        <symbol id="i-react" viewBox="0 0 24 24">
+            <path d="M3 18.5h18" />
+            <path d="M5.5 18.5v-1.4c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5v1.4" />
+            <path d="M12 10.6V8.2" />
+            <circle cx="12" cy="6.6" r="1.5" />
+        </symbol>
+        <symbol id="i-rx-cheers" viewBox="0 0 24 24">
+            <g transform="rotate(17 6.5 17)">
+                <path d="M3 6.6h7l-.9 10.4H3.9z" />
+                <path d="M3.4 10.6h6.2" />
+            </g>
+            <g transform="rotate(-17 17.5 17)">
+                <path d="M14 6.6h7l-.9 10.4h-5.2z" />
+                <path d="M14.4 10.6h6.2" />
+            </g>
+            <path d="M12 2.4v2.6M9.4 3.5l1.2 1.8M14.6 3.5l-1.2 1.8" />
+        </symbol>
+        <symbol id="i-rx-watch" viewBox="0 0 24 24">
+            <path d="M1.8 12.4c3-4.1 6.4-6.2 10.2-6.2s7.2 2.1 10.2 6.2" />
+            <path d="M22.2 12.4c-3 3.6-6.4 5.4-10.2 5.4S4.8 16 1.8 12.4" />
+            <circle cx="9.7" cy="12.3" r="3" />
+            <circle cx="9.7" cy="12.3" r="1" />
+        </symbol>
+        <symbol id="i-rx-mask" viewBox="0 0 24 24">
+            <path d="M2.4 7.6h19.2v3.6c0 3.2-2.5 5.8-5.6 5.8-1.8 0-3.4-.9-4.4-2.2-1 1.3-2.6 2.2-4.4 2.2-3.1 0-5.6-2.6-5.6-5.8z" />
+            <path d="M6 10.8h3.6M14.4 10.8H18" />
+        </symbol>
+        <symbol id="i-rx-skull" viewBox="0 0 24 24">
+            <path d="M12 2.8c-4.6 0-8 3.2-8 7.4 0 2.5 1.1 4.3 2.6 5.4h10.8c1.5-1.1 2.6-2.9 2.6-5.4 0-4.2-3.4-7.4-8-7.4z" />
+            <circle cx="9" cy="10.1" r="1.9" />
+            <circle cx="15" cy="10.1" r="1.9" />
+            <path d="M12 12.6 10.9 14.7h2.2z" />
+            <path d="M6.6 15.6h10.8v5.6H6.6z" />
+            <path d="M9.3 15.6v5.6M12 15.6v5.6M14.7 15.6v5.6" />
+        </symbol>
+        <symbol id="i-rx-hat" viewBox="0 0 24 24">
+            <path d="M6.6 12.4V7.9c0-1.9 1.5-3.4 3.4-3.4h4c1.9 0 3.4 1.5 3.4 3.4v4.5" />
+            <path d="M6.6 9.6h10.8" />
+            <path d="M2 12.4h20c0 2.2-4.5 4-10 4s-10-1.8-10-4z" />
+        </symbol>
+        <symbol id="i-rx-hourglass" viewBox="0 0 24 24">
+            <path d="M5.5 2.8h13M5.5 21.2h13" />
+            <path d="M7 2.8v3.6L12 12l5-5.6V2.8" />
+            <path d="M7 21.2v-3.6L12 12l5 5.6v3.6" />
+            <path d="M12 12v5.2" />
+        </symbol>
+    </svg>
+
+    <div id="ambience" aria-hidden="true">
+        <div class="amb-glow amb-glow--key"></div>
+        <div class="amb-glow amb-glow--red"></div>
+        <div class="amb-glow amb-glow--cyan"></div>
+        <div id="grain"></div>
+        <div id="vignette"></div>
+    </div>
+    <canvas id="fx-canvas" aria-hidden="true"></canvas>
+    <div id="fx-flash" aria-hidden="true"></div>
+    <div id="fx-blood" aria-hidden="true"></div>
+
+    <div id="app">
+
+        <div id="topbar">
+            <div class="topbar__side">
+                <button id="backBtn" class="icon-btn" title="Back" aria-label="Back" hidden>
+                    <svg class="ico" aria-hidden="true"><use href="#i-exit" /></svg>
+                </button>
+            </div>
+
+            <div class="topbar__center">
+                <div id="turn-pill" class="turn-pill" hidden>
+                    <svg class="turn-pill__ring" viewBox="0 0 40 40" aria-hidden="true">
+                        <path class="turn-pill__ring-bg" d="M20 3 H37 V37 H3 V3 H20" />
+                        <path id="turnTimerArc" class="turn-pill__ring-arc" d="M20 3 H37 V37 H3 V3 H20" />
+                    </svg>
+                    <span id="turn-pill-avatar" class="turn-pill__avatar"></span>
+                    <span id="turn-pill-text" class="turn-pill__text">Waiting…</span>
+                </div>
+            </div>
+
+            <div class="topbar__side topbar__side--right">
+                <div class="rx-wrap" id="reactionWrap" hidden>
+                    <button id="reactionBtn" class="icon-btn" title="React" aria-label="React"
+                        aria-haspopup="true" aria-expanded="false">
+                        <svg class="ico" aria-hidden="true"><use href="#i-react" /></svg>
+                    </button>
+                    <div id="reaction-tray" class="rx-tray" role="menu" aria-label="Reactions" hidden></div>
+                </div>
+                <button id="soundToggleBtn" class="icon-btn" title="Sound on/off" aria-label="Toggle sound">
+                    <svg class="ico" aria-hidden="true"><use id="soundIconUse" href="#i-sound-on" /></svg>
+                </button>
+                <button id="rulesBtnGame" class="icon-btn icon-btn--glyph" title="How to play"
+                    aria-label="How to play">?</button>
+                <button id="logToggleBtn" class="icon-btn" title="Game log" aria-label="Toggle game log" hidden>
+                    <svg class="ico" aria-hidden="true"><use href="#i-log" /></svg>
+                </button>
+            </div>
+        </div>
+
+        <main id="screens">
+
+            <section id="screen-lobby" class="screen is-active">
+
+                <div class="lobby-step is-active" id="lobby-menu">
+                    <div class="menu">
+                        <div class="marquee">
+                            <svg class="marquee-bulbs" viewBox="0 0 400 12" preserveAspectRatio="none"
+                                aria-hidden="true"></svg>
+                            <h1 class="neon-sign">
+                                <span class="neon-sign__line1">E-MONEY'S</span>
+                                <span class="neon-sign__line2">BAR</span>
+                            </h1>
+                            <p class="marquee-sub">Bluff. Challenge. Pull the trigger.</p>
+                        </div>
+
+                        <div class="panel menu__panel">
+                            <label class="field">
+                                <span class="field__label">Who's asking?</span>
+                                <input type="text" id="playerNameInput" maxlength="14" autocomplete="off"
+                                    spellcheck="false" placeholder="Your name">
+                                <span class="field__hint" id="nameHint"></span>
+                            </label>
+
+                            <div class="menu__actions">
+                                <button id="createRoomBtn" class="btn btn--primary btn--lg">
+                                    <svg class="ico" aria-hidden="true"><use href="#i-deal" /></svg> Host a table
+                                </button>
+                                <button id="joinRoomBtn" class="btn btn--ghost btn--lg">
+                                    <svg class="ico" aria-hidden="true"><use href="#i-enter" /></svg> Join a table
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lobby-step" id="lobby-join">
+                    <div class="panel join-card">
+                        <h2 class="step-title">Join a table</h2>
+                        <p class="step-sub">Ask the host for their five-character code.</p>
+                        <label class="field">
+                            <span class="field__label">Room code</span>
+                            <input type="text" id="roomCodeInput" class="input--code" maxlength="5" autocomplete="off"
+                                spellcheck="false" placeholder="ABC12">
+                        </label>
+                        <button id="connectToHostBtn" class="btn btn--primary btn--lg btn--block">Connect</button>
+                        <p id="client-status" class="status-line">Enter the host's room code to join.</p>
+                    </div>
+                </div>
+
+                <div class="lobby-step" id="lobby-table">
+                    <div class="waitroom">
+                        <div class="waitroom__stage">
+                            <div class="wtable">
+                                <div class="wtable__rim"></div>
+                                <div class="wtable__felt"></div>
+                                <div class="wtable__inlay"></div>
+                                <div class="wtable__center">
+                                    <span class="wtable__label">Room code</span>
+                                    <span id="roomCodeDisplay" class="wtable__code">•••••</span>
+                                    <button id="copyRoomCodeBtn" class="btn btn--ghost btn--sm">Copy</button>
+                                </div>
+                                <div id="waitroom-seats"></div>
+                            </div>
+                        </div>
+
+                        <aside class="panel waitroom__side">
+                            <h2 class="step-title" id="waitroomTitle">Your table</h2>
+                            <p class="step-sub" id="waitroomSub">Waiting for players to sit down.</p>
+
+                            <div class="option-row" id="turnTimerRow">
+                                <div>
+                                    <span class="option-row__label">Turn timer</span>
+                                    <span class="option-row__hint">Auto-plays for idle players</span>
+                                </div>
+                                <div class="segmented" id="turnTimerSeg" role="group" aria-label="Turn timer">
+                                    <button type="button" data-sec="0">Off</button>
+                                    <button type="button" data-sec="20">20s</button>
+                                    <button type="button" data-sec="30" class="is-active">30s</button>
+                                    <button type="button" data-sec="45">45s</button>
+                                </div>
+                            </div>
+
+                            <div class="option-row" id="openCallsRow">
+                                <div>
+                                    <span class="option-row__label">Liar calls</span>
+                                    <span class="option-row__hint">Who can call out the last play</span>
+                                </div>
+                                <div class="segmented" id="openCallsSeg" role="group" aria-label="Liar calls">
+                                    <button type="button" data-open="0" class="is-active">Next</button>
+                                    <button type="button" data-open="1">Anyone</button>
+                                </div>
+                            </div>
+
+                            <div class="waitroom__tally">
+                                <span>At the table</span>
+                                <span id="connected-players-count" class="tally">1 / 4</span>
+                            </div>
+
+                            <div class="waitroom__foot">
+                                <button id="startGameBtn" class="btn btn--danger btn--lg btn--block" disabled>
+                                    Start game
+                                </button>
+                                <p class="step-foot" id="startHint">Waiting for at least one more player…</p>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+
+            </section>
+
+            <section id="screen-game" class="screen">
+
+                <div id="table-area">
+                <div id="seats"></div>
+
+                <div id="table">
+                    <div class="table__rim"></div>
+                    <div class="table__bead"></div>
+                    <div class="table__felt"></div>
+                    <div class="table__inlay"></div>
+
+                    <div class="table__content">
+                        <div id="suit-medallion" class="suit-medallion" title="Table suit">
+                            <span class="suit-medallion__label">Table suit</span>
+                            <span id="suit-medallion-glyph" class="suit-medallion__glyph">?</span>
+                            <span id="suit-medallion-name" class="suit-medallion__name">None</span>
+                        </div>
+
+                        <div id="pile" class="pile" aria-hidden="true"></div>
+
+                        <div id="last-play" class="last-play">Awaiting the first play…</div>
+                    </div>
+                </div>
+            </div>
+
+            <footer id="dock">
+                <div id="self-plate" class="self-plate" hidden></div>
+                <div id="hand-wrap">
+                    <div id="hand" class="hand"></div>
+                </div>
+                <div id="actions">
+                    <button id="playCardsBtn" class="btn btn--primary btn--action" disabled>
+                        <span class="btn__label">Play</span>
+                        <kbd>P</kbd>
+                    </button>
+                    <div id="select-counter" class="select-counter"><b>0</b> / 3 selected</div>
+                    <button id="callLiarBtn" class="btn btn--liar btn--action" disabled>
+                        <span class="btn__label">Liar!</span>
+                        <kbd>L</kbd>
+                    </button>
+                </div>
+            </footer>
+
+            <aside id="log-panel">
+                <div class="log-panel__head">
+                    <h3>Game log</h3>
+                    <button id="logCloseBtn" class="icon-btn icon-btn--sm" aria-label="Close log">
+                        <svg class="ico" aria-hidden="true"><use href="#i-close" /></svg>
+                    </button>
+                </div>
+                <div id="log-messages" class="log-panel__body"></div>
+            </aside>
+            </section>
+        </main>
+    </div>
+
+    <div id="turn-announce" class="turn-announce" aria-hidden="true">
+        <span class="turn-announce__text">Your turn</span>
+    </div>
+
+    <div id="reaction-layer" aria-hidden="true"></div>
+
+    <div id="modal-roulette" class="modal modal--roulette">
+        <div class="modal__backdrop"></div>
+        <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="rouletteTitle">
+            <h2 id="rouletteTitle" class="modal__title">Challenge</h2>
+            <p id="rouletteDetails" class="modal__sub"></p>
+
+            <div id="revealed-cards" class="revealed-cards"></div>
+
+            <p id="rouletteConsequence" class="roulette-consequence"></p>
+
+            <div id="revolver-stage" class="revolver-stage"></div>
+
+            <p id="rouletteResult" class="roulette-result"></p>
+            <button id="continueGameBtn" class="btn btn--primary btn--block" disabled>Continue</button>
+        </div>
+    </div>
+
+    <div id="modal-gameover" class="modal modal--gameover">
+        <div class="modal__backdrop"></div>
+        <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="gameOverTitle">
+            <svg id="gameOverOrnament" class="gameover-ornament" viewBox="0 0 140 32" aria-hidden="true">
+                <use href="#i-ornament" />
+            </svg>
+            <h2 id="gameOverTitle" class="modal__title">Game over</h2>
+            <p id="gameOverMessage" class="modal__sub"></p>
+
+            <div id="game-ledger" class="ledger" hidden>
+                <div class="ledger__head">
+                    <span class="ledger__title">The ledger</span>
+                    <span id="ledgerRounds" class="ledger__rounds"></span>
+                </div>
+
+                <div id="ledgerHonours" class="ledger__honours"></div>
+
+                <div class="ledger__figures">
+                    <table class="ledger__table">
+                        <thead>
+                            <tr>
+                                <th class="ledger__num" scope="col">#</th>
+                                <th scope="col">Player</th>
+                                <th class="ledger__num ledger__col-wide" scope="col">Plays</th>
+                                <th class="ledger__num" scope="col">Lies</th>
+                                <th class="ledger__num" scope="col">Calls</th>
+                                <th class="ledger__num" scope="col">Pulls</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ledgerRows"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="rematch-status" class="rematch" hidden>
+                <span class="rematch__label">Rematch</span>
+                <div id="rematch-status-list" class="rematch__list"></div>
+            </div>
+
+            <div class="modal__actions">
+                <button id="playAgainBtn" class="btn btn--primary">Ready for rematch</button>
+                <button id="exitGameBtn" class="btn btn--ghost">Leave table</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-rules" class="modal modal--rules">
+        <div class="modal__backdrop" data-close-modal></div>
+        <div class="modal__box" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+            <h2 id="rulesTitle" class="modal__title">House rules</h2>
+            <div class="rules">
+                <p class="rules__intro">A bluffing game of cards and nerve. Lie well, or answer to the revolver.</p>
+
+                <section class="rule">
+                    <span class="rule__num">1</span>
+                    <div>
+                        <h3>The goal</h3>
+                        <p>Be the last player breathing.</p>
+                    </div>
+                </section>
+                <section class="rule">
+                    <span class="rule__num">2</span>
+                    <div>
+                        <h3>The setup</h3>
+                        <p>Everyone gets <strong>5 cards</strong> and a <strong>6-chamber revolver</strong> holding one
+                            live round. One suit, <span class="suit suit--red">♥</span>
+                            <span class="suit suit--red">♦</span> <span class="suit">♣</span>
+                            <span class="suit">♠</span>, is named the <strong>table suit</strong> for the round.</p>
+                    </div>
+                </section>
+                <section class="rule">
+                    <span class="rule__num">3</span>
+                    <div>
+                        <h3>Playing cards</h3>
+                        <p>On your turn, play <strong>1-3 cards face down</strong> and declare them all to be the table
+                            suit. They don't have to be. That's the whole game.</p>
+                    </div>
+                </section>
+                <section class="rule">
+                    <span class="rule__num">4</span>
+                    <div>
+                        <h3>Calling "Liar!"</h3>
+                        <p>Instead of playing, call out the previous player. The cards are flipped:</p>
+                        <ul>
+                            <li>They lied → <strong>they</strong> face the revolver.</li>
+                            <li>They told the truth → <strong>you</strong> face the revolver.</li>
+                        </ul>
+                        <p>Out of cards on your turn? You <em>must</em> call Liar.</p>
+                        <p>If the host opens calls to <strong>anyone</strong>, every player still in can
+                            call out the last play at any time, not just whoever is next. The first
+                            call to land counts.</p>
+                    </div>
+                </section>
+                <section class="rule">
+                    <span class="rule__num">5</span>
+                    <div>
+                        <h3>Emptying your hand</h3>
+                        <p>Play your last card successfully and you still face the revolver, but survive it and the
+                            round ends on your terms.</p>
+                    </div>
+                </section>
+                <section class="rule">
+                    <span class="rule__num">6</span>
+                    <div>
+                        <h3>The revolver</h3>
+                        <p>Spin, pull. A <strong class="txt-red">bang</strong> eliminates you. A
+                            <strong class="txt-green">click</strong> and you live: the cylinder reloads for the next
+                            round, and you start it.</p>
+                    </div>
+                </section>
+            </div>
+            <button id="closeRulesBtn" class="btn btn--primary btn--block">Got it</button>
+        </div>
+    </div>
+
+    <div id="modal-confirm" class="modal modal--confirm">
+        <div class="modal__backdrop" data-close-modal></div>
+        <div class="modal__box modal__box--narrow" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+            <h2 id="confirmTitle" class="modal__title">Are you sure?</h2>
+            <p id="confirmMessage" class="modal__sub"></p>
+            <div class="modal__actions">
+                <button id="confirmOkBtn" class="btn btn--danger">Confirm</button>
+                <button id="confirmCancelBtn" class="btn btn--ghost">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-stack" role="status" aria-live="polite"></div>
+    <div id="server-status" class="server-status" data-state="connecting">
+        <span class="server-status__dot"></span>
+        <span id="server-status-text">Waking the server… this can take a minute.</span>
+    </div>
+
+</body>
+
+</html>
