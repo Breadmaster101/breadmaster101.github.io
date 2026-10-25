@@ -50,9 +50,8 @@ function matches(p) {
 }
 
 function card(p) {
-  const typeLabel = p.type === 'app' ? 'App and Tool' : 'Game';
   const metaLeft = el('span', {},
-    [p.featured ? 'Latest' : null, typeLabel, ...(p.tags || [])].filter(Boolean).join(' · ')
+    [p.featured ? 'Latest' : null, ...(p.tags || [])].filter(Boolean).join(' · ')
   );
 
   return el('article', { class: 'card' },
