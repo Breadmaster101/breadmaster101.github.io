@@ -71,18 +71,13 @@ function card(p) {
   );
 }
 
-function renderProjects({ animate = false } = {}) {
+function renderProjects() {
   const visible = state.projects.filter(matches);
   if (!visible.length) {
     $projects.replaceChildren(el('div', { class: 'empty mono' }, 'No projects match that search.'));
     return;
   }
-  const cards = visible.map(card);
-  if (animate) {
-    // Stagger in after the side column's reveal.
-    cards.forEach((c, i) => { c.classList.add('reveal'); c.style.setProperty('--i', i + 3); });
-  }
-  $projects.replaceChildren(...cards);
+  $projects.replaceChildren(...visible.map(card));
 }
 
 document.getElementById('year').textContent = new Date().getFullYear();
@@ -108,7 +103,7 @@ fetch('projects.json')
     if (!projects.some((p) => p.featured) && projects.length) projects[0].featured = true;
     state.projects = projects;
     renderFilters();
-    renderProjects({ animate: true });
+    renderProjects();
   })
   .catch(() => {
     $projects.replaceChildren(el('div', { class: 'empty mono' }, 'Couldn’t load projects.'));
