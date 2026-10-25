@@ -1,6 +1,6 @@
 // Renders projects.json into the filter list and card stack.
 
-const TYPE_LABELS = { game: 'Games', app: 'Apps and Tools' };
+const TYPE_LABELS = { game: 'Games', app: 'Apps and tools' };
 
 const state = { projects: [], filter: 'all', query: '' };
 
