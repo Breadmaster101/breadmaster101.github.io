@@ -56,7 +56,7 @@ function card(p) {
     [p.featured ? 'Latest' : null, typeLabel, ...(p.tags || [])].filter(Boolean).join(' · ')
   );
 
-  return el('article', { class: 'card' + (p.featured ? ' featured' : '') },
+  return el('article', { class: 'card' },
     el('div', { class: 'meta mono' },
       metaLeft,
       el('time', { datetime: p.released }, formatDate(p.released))
