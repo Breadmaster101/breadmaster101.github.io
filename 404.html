@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Not found · Breadmaster101</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#1c1d21">
+  <!-- GitHub Pages serves this file at any missing path, so every URL here is root-absolute. -->
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .lost { max-width: 560px; }
+    .lost h1 { font-size: 36px; font-weight: 500; letter-spacing: -.035em; line-height: 1.08; margin-bottom: 16px; }
+    .lost p { color: var(--body); margin-bottom: 24px; word-break: break-word; }
+    .lost .play { display: inline-block; margin-right: 10px; margin-bottom: 10px; }
+    .lost .play:hover { border-color: var(--fg); }
+  </style>
+</head>
+<body>
+
+  <div class="site">
+    <header class="nav">
+      <a class="logo" href="/">breadmaster101<span class="tld">.github.io</span></a>
+      <nav>
+        <a href="https://github.com/Breadmaster101" target="_blank" rel="noopener">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="lost" id="lost" hidden>
+      <h1>Page not found</h1>
+      <p id="message">There's nothing at <span class="mono" id="path"></span>.</p>
+      <div id="links"><a class="play" href="/">All projects</a></div>
+    </main>
+
+    <footer class="foot">
+      <span>© <span id="year">2026</span> Breadmaster101</span>
+    </footer>
+  </div>
+
+  <script>
+    // Redirects mistyped project URLs (e.g. /moonlandergame/) to the closest project in projects.json.
+
+    const $lost = document.getElementById('lost');
+    const segments = location.pathname.split('/').filter(Boolean);
+    const typed = decodeURIComponent(segments[0] || '');
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('path').textContent = location.pathname;
+
+    // Compare ignoring case, spaces, dashes, and punctuation.
+    const normalize = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+    function distance(a, b) {
+      let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+      for (let i = 1; i <= a.length; i++) {
+        const row = [i];
+        for (let j = 1; j <= b.length; j++) {
+          row[j] = Math.min(prev[j] + 1, row[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+        }
+        prev = row;
+      }
+      return prev[b.length];
+    }
+
+    // Lower is better; Infinity means not a plausible match.
+    function score(input, p) {
+      const names = [p.url.split('/').filter(Boolean)[0] || '', p.title].map(normalize);
+      let best = Infinity;
+      for (const name of names) {
+        if (input === name) return 0;
+        // "moonlander" for "moonlandergame", or "battlethundergame" for "battlethunder".
+        if (input.length >= 4 && (name.startsWith(input) || input.startsWith(name))) best = Math.min(best, 1);
+        const d = distance(input, name);
+        if (d <= Math.max(2, Math.floor(name.length * 0.3))) best = Math.min(best, 1 + d);
+      }
+      return best;
+    }
+
+    function redirect(p) {
+      // Keep anything after the mistyped folder, plus the query and hash.
+      const target = p.url + segments.slice(1).join('/');
+      // The project itself may be what's missing; don't loop back to this page.
+      if (target === location.pathname) return false;
+      location.replace(target + location.search + location.hash);
+      return true;
+    }
+
+    function showNotFound(suggestions) {
+      if (suggestions.length) {
+        document.getElementById('message').append(' Were you looking for one of these?');
+        const $links = document.getElementById('links');
+        $links.prepend(...suggestions.map((p) => {
+          const a = document.createElement('a');
+          a.className = 'play';
+          a.href = p.url;
+          a.textContent = p.title;
+          return a;
+        }));
+      }
+      $lost.hidden = false;
+    }
+
+    const input = normalize(typed);
+    if (!input) {
+      showNotFound([]);
+    } else {
+      fetch('/projects.json', { cache: 'no-cache' })
+        .then((r) => r.json())
+        .then((projects) => {
+          const ranked = projects
+            .map((p) => ({ p, s: score(input, p) }))
+            .filter((r) => r.s < Infinity)
+            .sort((a, b) => a.s - b.s);
+          // Only redirect when one project is clearly the best match.
+          const clear = ranked.length && (ranked.length === 1 || ranked[0].s < ranked[1].s);
+          if (!clear || !redirect(ranked[0].p)) {
+            showNotFound(ranked.slice(0, 3).map((r) => r.p));
+          }
+        })
+        .catch(() => showNotFound([]));
+    }
+  </script>
+</body>
+</html>
