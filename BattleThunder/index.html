@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battle Thunder</title>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@700;900&display=swap" rel="stylesheet">
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+  <script type="module" crossorigin src="/BattleThunder/assets/index-hcJkteSz.js"></script>
+  <link rel="stylesheet" crossorigin href="/BattleThunder/assets/index-D3x5pvy2.css">
+</head>
+
+<body>
+
+    <div id="fps-counter">0</div>
+
+    <div id="volume-control">
+        <svg id="volume-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0">
+    </div>
+
+    <div id="cloud-whiteout" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(200, 200, 200, 0.95); z-index: 50; display: none; pointer-events: none;"></div>
+
+    <div id="ui-alert">
+        <span id="ui-alert-text"></span>
+    </div>
+
+    <div id="lobby-overlay">
+        <div id="ui-3d-container"></div>
+        <div id="step-login" class="panel-box">
+            <div class="lobby-title">BATTLE THUNDER</div>
+            <div class="credit-text">Created by E-Money aka Breadmaster/MbappeFartBubble</div>
+            <input type="text" id="username" placeholder="ENTER USERNAME" maxlength="12" onkeypress="if(event.key === 'Enter') goToMenu()">
+            <button onclick="goToMenu()">ENTER HANGAR</button>
+        </div>
+
+        <div id="step-connecting" class="panel-box" style="display:none;">
+            <div class="lobby-title">CONNECTING</div>
+            <div class="status-text">
+                <span id="connection-status">Connecting to server...</span>
+            </div>
+            <div class="loader-track">
+                <div class="loader-bar"></div>
+            </div>
+        </div>
+
+        <div id="step-menu" class="panel-box" style="display:none;">
+            <div class="lobby-title">MISSION SELECT</div>
+            <button onclick="hostGame()">HOST SQUADRON</button>
+            <div class="menu-divider"><span>OR</span></div>
+            <input type="text" id="room-code-input" placeholder="ENTER ROOM CODE" maxlength="4" oninput="this.value = this.value.toUpperCase().replace(/[^A-HJKMNPQRSTUVWXYZ2-9]/g, '')" onkeypress="if(event.key === 'Enter') joinGame()">
+            <button onclick="joinGame()">JOIN SQUADRON</button>
+            
+            <button onclick="goBackToLogin()" class="secondary-btn" style="margin-top: 40px;">BACK TO LOGIN</button>
+        </div>
+
+        <div id="step-waiting" class="panel-box" style="display:none;">
+            <div class="lobby-title">SQUADRON</div>
+            <div class="room-header-row" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div class="room-code-display" style="margin-bottom: 0;">ROOM CODE: <span id="display-room-code" class="highlight-text">----</span></div>
+                <button id="add-ai-btn" class="discrete-btn" onclick="addAIPlane()" style="display:none; margin: 0 !important;">ADD AI PLANE</button>
+            </div>
+            <div id="player-list"></div>
+            <button id="start-btn" onclick="startGame()" style="display:none;">START MISSION</button>
+            <div id="waiting-msg" class="waiting-text">WAITING FOR HOST TO START...</div>
+            
+            <button onclick="leaveSquadron()" class="secondary-btn" style="margin-top: 40px;">LEAVE SQUADRON</button>
+        </div>
+    </div>
+
+    <div id="bake-overlay">
+        <div class="panel-box">
+            <div class="lobby-title">DEPLOYING</div>
+            <div id="bake-status-text" class="status-text">
+                GENERATING WORLD...
+            </div>
+            <div class="loader-track">
+                <div class="loader-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hud-container" id="hud-main">
+        <div class="hud-box">
+            <h1 id="hud-name">PLAYER</h1>
+            <div class="stat-row"><span>SPEED</span><span class="stat-val"><span id="speedVal">0</span> KTS</span></div>
+            <div class="stat-row"><span>THROTTLE</span><span class="stat-val"><span id="throtVal">0</span>%</span></div>
+            <div class="stat-row"><span>ALTITUDE</span><span class="stat-val" id="altValContainer"><span id="altVal">0</span> M</span></div>
+            <div class="stat-row"><span>HEADING</span><span class="stat-val"><span id="headingVal">0</span>°</span></div>
+            <div class="stat-row health-row"><span>HEALTH</span><span class="stat-val"><span id="hpVal">100</span>%</span></div>
+            
+            <div class="stat-row"><span>AMMO</span><span class="stat-val"><span id="ammoText">40</span></span></div>
+            <div class="ammo-bar-container" style="width:100%; height:3px; background:rgba(255, 255, 255, 0.15); margin-top:5px; position:relative; overflow:hidden;">
+                <div id="ammoBar" style="position:absolute; top:0; left:0; height:100%; width:100%; background:#ffffff; transition: width 0.05s linear;"></div>
+            </div>
+            <div id="reloadWarn" style="display:none; font-size: 0.85rem; font-weight: 600; letter-spacing: 0.15em; color: #ffaa00; text-transform: uppercase; margin-top: 5px; text-align: center; animation: blink 0.5s infinite alternate;">RELOADING...</div>
+
+            <div id="stallWarn" style="display:none;">!! STALL WARNING !!</div>
+
+            <div class="radar" id="radar">
+                <div class="radar-center"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="leaderboard">
+        <div id="leaderboard-table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>PILOT</th>
+                        <th>C</th>
+                        <th>K</th>
+                        <th>D</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="crash-msg" class="crash-msg">
+        <div id="death-reason">YOU CRASHED</div>
+        <span id="respawn-text">RESPAWNING...</span>
+    </div>
+
+    <div id="controls">
+        <b>FLIGHT CONTROLS</b>
+        <span class="highlight-key">[W/S]</span> OR <span class="highlight-key">[↑/↓]</span> PITCH<br>
+        <span class="highlight-key">[A/D]</span> OR <span class="highlight-key">[←/→]</span> ROLL<br>
+        <span class="highlight-key">[Q/E]</span> YAW<br>
+        <span class="highlight-key">[SHIFT]</span> THROTTLE UP<br>
+        <span class="highlight-key">[SPACE]</span> THROTTLE DOWN<br>
+        <span class="highlight-key">[B]</span> HOLD TO LOOK BACK<br>
+        <span class="action-fire">[F] FIRE WEAPON</span>
+    </div>
+    
+    <button id="quit-btn" onclick="quitGame()">QUIT MISSION</button>
+</body>
+</html>
