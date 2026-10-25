@@ -3,7 +3,7 @@
     "title": "CurlingMania",
     "type": "game",
     "released": "2026-03-31",
-    "description": "Real-time multiplayer curling. Grab, drag, and release your stones to score.",
+    "description": "A 2D multiplayer curling-inspired web game. The main mechanic is physics based.",
     "tags": ["Multiplayer", "Mouse"],
     "url": "/CurlingMania/"
   },
@@ -11,7 +11,7 @@
     "title": "Battle Thunder",
     "type": "game",
     "released": "2026-01-14",
-    "description": "3D multiplayer dogfights. Host a squadron, share the room code, and fill the sky with AI planes.",
+    "description": "A 3D multiplayer plane dogfighting web game. You can also play single player against AI planes, or add them to multiplayer games.",
     "tags": ["Multiplayer", "3D", "Keyboard"],
     "url": "/BattleThunder/"
   },
@@ -19,7 +19,7 @@
     "title": "E-Money's Bar",
     "type": "game",
     "released": "2025-05-26",
-    "description": "A bluffing card game for 2 to 8 players. Lie about your cards, and if someone calls you out, spin the cylinder.",
+    "description": "A 2D multiplayer bluffing card game based on the card game "BS".",
     "tags": ["Multiplayer", "Cards"],
     "url": "/EMoneysBar/"
   },
@@ -27,7 +27,7 @@
     "title": "WebSend",
     "type": "app",
     "released": "2026-10-11",
-    "description": "Send files and text straight between devices over an encrypted peer-to-peer connection. No server, no account, no upload.",
+    "description": "An encrypted peer-to-peer file sharing website that transfers files directly between devices using WebRTC, without passing through a server.",
     "tags": ["Files", "P2P", "Mobile"],
     "url": "/WebSend/",
     "source": "https://github.com/Breadmaster101/WebSend"
