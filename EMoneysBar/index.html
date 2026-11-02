@@ -23,8 +23,8 @@
 
 
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-  <script type="module" crossorigin src="/EMoneysBar/assets/index-B5SpqMFU.js"></script>
-  <link rel="stylesheet" crossorigin href="/EMoneysBar/assets/index-DcgPeXPW.css">
+  <script type="module" crossorigin src="/EMoneysBar/assets/index-gGSpZ3zO.js"></script>
+  <link rel="stylesheet" crossorigin href="/EMoneysBar/assets/index-Dk1tyR4E.css">
 </head>
 
 <body>
@@ -392,6 +392,7 @@
                         <kbd>P</kbd>
                     </button>
                     <div id="select-counter" class="select-counter"><b>0</b> / 3 selected</div>
+                    <div id="action-hint" class="action-hint" hidden></div>
                     <button id="callLiarBtn" class="btn btn--liar btn--action" disabled>
                         <span class="btn__label">Liar!</span>
                         <kbd>L</kbd>
@@ -511,6 +512,7 @@
                         <h3>Playing cards</h3>
                         <p>On your turn, play <strong>1-3 cards face down</strong> and declare them all to be the table
                             suit. They don't have to be. That's the whole game.</p>
+                        <p>Let the turn clock run out and you face the revolver.</p>
                     </div>
                 </section>
                 <section class="rule">
@@ -522,7 +524,6 @@
                             <li>They lied → <strong>they</strong> face the revolver.</li>
                             <li>They told the truth → <strong>you</strong> face the revolver.</li>
                         </ul>
-                        <p>Out of cards on your turn? You <em>must</em> call Liar.</p>
                         <p>If the host opens calls to <strong>anyone</strong>, every player still in can
                             call out the last play at any time, not just whoever is next. The first
                             call to land counts.</p>
@@ -532,8 +533,9 @@
                     <span class="rule__num">5</span>
                     <div>
                         <h3>Emptying your hand</h3>
-                        <p>Play your last card successfully and you still face the revolver, but survive it and the
-                            round ends on your terms.</p>
+                        <p>Play your last card and the next player decides: call <strong>Liar</strong>, or
+                            <strong>let it stand</strong>. A call plays out as usual. Let it stand and you choose
+                            who takes the revolver. Don't choose in time and it goes to someone at random.</p>
                     </div>
                 </section>
                 <section class="rule">
