@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skyhauler</title>
+<meta name="description" content="A crew airship game in the browser. Fly the calm around sunset, carry buckwheat between the mills of the shelf, then put a line on a mast and turn in before the night wind.">
+<link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="manifest" href="./site.webmanifest">
+<meta name="theme-color" content="#16215c">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Skyhauler">
+<meta property="og:description" content="A crew airship game in the browser. Fly the calm around sunset, carry buckwheat between the mills of the shelf, then put a line on a mast and turn in before the night wind.">
+<meta property="og:image" content="og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="A braked four-sail windmill wheel over a low sun, beside the title Skyhauler">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@300;400;500;600&family=Rajdhani:wght@600;700&family=Josefin+Sans:wght@700&family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #fdf2e2;
+    --ink-dim: rgba(253, 242, 226, 0.62);
+    --gold: #ffc46a;
+    --red: #ff7a5e;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; padding: 0; height: 100%; overflow: hidden;
+    background: #16215c; color: var(--ink);
+    font-family: Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  #view { display: block; width: 100vw; height: 100vh; }
+
+  /* The one piece of screen-space text the design allows: subtitles for crew
+     voice, on by default, because those lines carry information a player
+     cannot get any other way (S18). Everything else is a physical object. */
+  #subtitles {
+    position: fixed; left: 50%; bottom: 8vh; transform: translateX(-50%);
+    max-width: min(760px, 82vw); text-align: center;
+    font-size: 15px; line-height: 1.55; letter-spacing: 0.01em;
+    text-shadow: 0 2px 12px rgba(24, 12, 40, 0.95), 0 0 3px rgba(24, 12, 40, 0.9);
+    pointer-events: none; z-index: 30;
+  }
+  #subtitles .line { margin: 2px 0; opacity: 0; animation: sub 0.25s ease forwards; }
+  #subtitles .who { color: var(--gold); }
+  @keyframes sub { to { opacity: 1; } }
+
+  /* What has been said this calm, while / is held; over the subtitles' place. */
+  #chathistory {
+    position: fixed; left: 50%; bottom: 8vh; transform: translateX(-50%);
+    width: min(760px, 82vw); max-height: 62vh; overflow-y: auto; scrollbar-width: none;
+    padding: 12px 16px; border-radius: 2px;
+    background: rgba(24, 12, 40, 0.72); backdrop-filter: blur(6px);
+    font-size: 15px; line-height: 1.55; letter-spacing: 0.01em;
+    pointer-events: none; z-index: 31;
+  }
+  #chathistory[hidden] { display: none; }
+  #chathistory::-webkit-scrollbar { display: none; }
+  #chathistory .line { margin: 2px 0; }
+  #chathistory .who { color: var(--gold); }
+
+  /* Crosshair: a hairline dot, not a reticle. It exists so you know what your
+     hand will reach, not to aim anything. */
+  #dot {
+    position: fixed; left: 50%; top: 50%; width: 5px; height: 5px;
+    margin: -2.5px 0 0 -2.5px; border-radius: 50%;
+    background: rgba(253, 242, 226, 0.5); box-shadow: 0 0 4px rgba(24, 12, 40, 0.8);
+    pointer-events: none; z-index: 25; transition: all 0.12s ease;
+  }
+  #dot.reach { width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px;
+    background: rgba(255, 224, 170, 0.95); }
+  #dot.grip { width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px;
+    background: var(--red); }
+  /* Not now: a bunk clicked off a mast. Dim and red for a moment. */
+  #dot.deny { width: 9px; height: 9px; margin: -4.5px 0 0 -4.5px;
+    background: rgba(255, 122, 94, 0.55); }
+  /* At the computer's keys: no dot over the glass. */
+  #dot.off { opacity: 0; }
+
+  /* The boot screen. Same sky as the menus behind it, so the very first frame
+     the player sees is already the right colour - there is no black screen
+     anywhere in this game before the sunset arrives. */
+  .overlay {
+    position: fixed; inset: 0; z-index: 100;
+    display: flex; align-items: center;
+    padding: 24px clamp(24px, 9vw, 150px);
+    background:
+      radial-gradient(120% 80% at 22% 108%, rgba(255, 180, 94, 0.55) 0%, rgba(255, 180, 94, 0) 55%),
+      linear-gradient(178deg, #16215c 0%, #3b3a86 34%, #8d5090 62%, #dd6f52 84%, #ffb45e 100%);
+  }
+  .overlay.hidden { display: none; }
+  .panel { width: min(560px, 92vw); }
+  h1 {
+    font-family: Rajdhani, "Segoe UI Semibold", system-ui, sans-serif;
+    font-size: clamp(3.2rem, 6.6vw, 6rem);
+    line-height: 0.92; letter-spacing: -0.02em;
+    margin: 0 0 10px; font-weight: 700; text-transform: uppercase;
+    text-shadow: 0 6px 40px rgba(255, 160, 80, 0.35);
+  }
+  /* The title, as on the title screen. */
+  #boot h1 {
+    font-family: "Josefin Sans", Rajdhani, "Segoe UI Semibold", system-ui, sans-serif;
+    font-size: clamp(3rem, 6.2vw, 5.6rem);
+    font-weight: 700; letter-spacing: 0.14em;
+  }
+  .sub {
+    color: var(--gold); letter-spacing: 0.34em; font-size: 11px;
+    font-weight: 600; text-transform: uppercase; margin-bottom: 38px;
+  }
+  button {
+    font-family: inherit; font-size: 13px; letter-spacing: 0.08em;
+    background: transparent; color: var(--ink);
+    border: 1px solid rgba(253, 242, 226, 0.16); border-radius: 2px;
+    padding: 10px 15px; cursor: pointer; margin: 0;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  /* Boot screen buttons sit in a row and space themselves; everywhere else
+     a button's room is its container's gap, or it rides off centre. */
+  #boot button { margin: 0 8px 10px 0; }
+  button:hover { border-color: var(--ink); background: rgba(253, 242, 226, 0.08); }
+  button:disabled { opacity: 0.32; cursor: default; }
+  button.primary { border-color: rgba(255, 196, 106, 0.6); color: var(--gold); }
+  .hint { color: var(--ink-dim); font-size: 12.5px; line-height: 2; margin-top: 30px; }
+  .hint b { color: var(--gold); font-weight: 600; }
+  #loading { color: var(--ink-dim); letter-spacing: 0.16em; font-size: 12px; text-transform: uppercase; }
+  #err {
+    position: fixed; inset: 0; z-index: 200; padding: 40px;
+    background: #16102c; color: #ffb0a0; overflow: auto;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 13px; line-height: 1.6; white-space: pre-wrap; display: none;
+  }
+</style>
+  <script type="module" crossorigin src="./assets/index-DjHkSIjl.js"></script>
+</head>
+<body>
+  <canvas id="view"></canvas>
+  <div id="dot"></div>
+  <div id="subtitles"></div>
+
+  <div id="boot" class="overlay">
+    <div class="panel">
+      <h1>Skyhauler</h1>
+      <div class="sub">An E-Money game</div>
+      <div id="bootbody"><div id="loading">starting game&hellip;</div></div>
+    </div>
+  </div>
+
+  <pre id="err"></pre>
+
+</body>
+</html>
