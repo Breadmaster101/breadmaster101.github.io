@@ -2097,6 +2097,7 @@ diffuseColor.rgb = mix(diffuseColor.rgb, uLegendInk, legend);`)},f.customProgram
       <div class="bi-title">
         <h1 class="bi-rise" style="--i:0">Skyhauler</h1>
         <div class="bi-kicker bi-rise" style="--i:1">An E-Money Game</div>
+        <div class="bi-buildtag bi-rise" style="--i:1">Test build</div>
         <label class="bi-nameplate bi-rise" style="--i:2" for="bi-name">Username
           <input id="bi-name" maxlength="${D2}" spellcheck="false" autocomplete="off" placeholder="YOUR NAME" value="${bs(e.username??"")}">
           <span class="bi-np-edit">click to change</span>
