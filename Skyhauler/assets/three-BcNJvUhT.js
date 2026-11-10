@@ -404,7 +404,7 @@ vec3 F_Schlick( const in vec3 f0, const in float f90, const in float dotVH ) {
 float F_Schlick( const in float f0, const in float f90, const in float dotVH ) {
 	float fresnel = exp2( ( - 5.55473 * dotVH - 6.98316 ) * dotVH );
 	return f0 * ( 1.0 - fresnel ) + ( f90 * fresnel );
-} // validated`,wc=`#ifdef ENVMAP_TYPE_CUBE_UV
+} `,wc=`#ifdef ENVMAP_TYPE_CUBE_UV
 	#define cubeUV_minMipLevel 4.0
 	#define cubeUV_minTileSize 16.0
 	float getFace( vec3 direction ) {
@@ -3605,7 +3605,7 @@ void main() {
 			vec3 getSample( float theta, vec3 axis ) {
 
 				float cosTheta = cos( theta );
-				// Rodrigues' axis-angle rotation
+				
 				vec3 sampleDirection = vOutputDirection * cosTheta
 					+ cross( axis, vOutputDirection ) * sin( theta )
 					+ axis * dot( axis, vOutputDirection ) * ( 1.0 - cosTheta );
@@ -3688,7 +3688,7 @@ void main() {
 
 		varying vec3 vOutputDirection;
 
-		// RH coordinate system; PMREM face-indexing convention
+		
 		vec3 getDirection( vec2 uv, float face ) {
 
 			uv = 2.0 * uv - 1.0;
@@ -3697,30 +3697,30 @@ void main() {
 
 			if ( face == 0.0 ) {
 
-				direction = direction.zyx; // ( 1, v, u ) pos x
+				direction = direction.zyx; 
 
 			} else if ( face == 1.0 ) {
 
 				direction = direction.xzy;
-				direction.xz *= -1.0; // ( -u, 1, -v ) pos y
+				direction.xz *= -1.0; 
 
 			} else if ( face == 2.0 ) {
 
-				direction.x *= -1.0; // ( -u, v, 1 ) pos z
+				direction.x *= -1.0; 
 
 			} else if ( face == 3.0 ) {
 
 				direction = direction.zyx;
-				direction.xz *= -1.0; // ( -1, v, -u ) neg x
+				direction.xz *= -1.0; 
 
 			} else if ( face == 4.0 ) {
 
 				direction = direction.xzy;
-				direction.xy *= -1.0; // ( -u, -1, v ) neg y
+				direction.xy *= -1.0; 
 
 			} else if ( face == 5.0 ) {
 
-				direction.z *= -1.0; // ( u, v, -1 ) neg z
+				direction.z *= -1.0; 
 
 			}
 
