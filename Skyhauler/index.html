@@ -65,6 +65,40 @@
   #chathistory .line { margin: 2px 0; }
   #chathistory .who { color: var(--gold); }
 
+  /* Typed chat (ui/textChat.js), on the left, clear of the chair's key card
+     under it. Shut, a line shows for a while and fades; open (T), all of
+     them, and the box to type in. */
+  #textchat {
+    position: fixed; left: 18px; bottom: max(30vh, 250px);
+    width: min(440px, 44vw);
+    font-size: 15px; line-height: 1.45; letter-spacing: 0.01em;
+    pointer-events: none; z-index: 29;
+  }
+  #textchat .lines {
+    display: flex; flex-direction: column; align-items: flex-start;
+    max-height: 32vh; overflow: hidden; scrollbar-width: none;
+  }
+  #textchat .lines::-webkit-scrollbar { display: none; }
+  #textchat.open .lines { max-height: 46vh; overflow-y: auto; }
+  /* The first line keeps to the foot of a list with room to spare. */
+  #textchat .line:first-child { margin-top: auto; }
+  #textchat .line {
+    flex: none; max-width: 100%; padding: 2px 8px; overflow-wrap: anywhere;
+    background: rgba(24, 12, 40, 0.55); transition: opacity 0.6s ease;
+  }
+  #textchat .line.old { opacity: 0; }
+  #textchat.open .line { opacity: 1; transition: none; }
+  #textchat .who { color: var(--gold); }
+  #textchat .note { color: var(--ink-dim); }
+  #textchat input {
+    display: block; width: 100%; margin-top: 6px; padding: 5px 8px;
+    border: 1px solid rgba(253, 242, 226, 0.28); border-radius: 2px; outline: none;
+    background: rgba(24, 12, 40, 0.78); color: var(--ink);
+    font: inherit; pointer-events: auto;
+  }
+  /* Its room is kept while it is shut, so the lines do not jump as it opens. */
+  #textchat input[hidden] { visibility: hidden; }
+
   /* Crosshair: a hairline dot, not a reticle. It exists so you know what your
      hand will reach, not to aim anything. */
   #dot {
@@ -136,7 +170,7 @@
     font-size: 13px; line-height: 1.6; white-space: pre-wrap; display: none;
   }
 </style>
-  <script type="module" crossorigin src="./assets/index-im23PXj2.js"></script>
+  <script type="module" crossorigin src="./assets/index-BJ8hj4pU.js"></script>
 </head>
 <body>
   <canvas id="view"></canvas>
